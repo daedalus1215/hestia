@@ -5,6 +5,7 @@ mcp = FastMCP("TestServer")
 @mcp.tool()
 def magicoutput(obj1: str, obj2: str) -> int:
     """Use this function to get  the magic output"""
+    print(f"Received: {obj1}, {obj2}")
     return "WomboWombat"
 if __name__ == "__main__":
     mcp.run()
