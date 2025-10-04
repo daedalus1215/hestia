@@ -32,9 +32,10 @@ print('---------------Tokenization-----------------')
 #  Play around with parsing data into a dataset dictionary
 from sklearn.model_selection import train_test_split
 train, test = train_test_split(df, test_size=0.3, stratify=df['label'])
-test, validation = train_test_split(df, test_size=1/3, stratify=df['label'])
-print(train.shape, test.shape)
-print(test.shape, validation.shape)
+test, validation = train_test_split(test, test_size=1/3, stratify=test['label'])
+print('train.shape', train.shape)
+print('test.shape', test.shape)
+print('validation.shape', validation.shape)
 
 
 from datasets import Dataset, DatasetDict
@@ -45,7 +46,7 @@ dataset = DatasetDict({
     'validation': Dataset.from_pandas(validation, preserve_index=False)
 })
 
-print(dataset)
+# print(dataset)
 
 # Tokenization of the data
 from transformers import AutoTokenizer
@@ -58,5 +59,18 @@ def tokenize(batch):
 
 encoded_dataset = dataset.map(tokenize, batched=True, batch_size=None)
 print(encoded_dataset)
+print('---------------train check-----------------')
 
-print(tokenize(dataset['train'][:2]))
+# print(tokenize(dataset['train'][:2])) 
+# print(dataset['train'][0])
+emotion_encoded = dataset.map(tokenize, batched=True, batch_size=None)
+print('---------------emotion_encoded-----------------')
+print(emotion_encoded)
+
+label2id = { x['label_name']:x['label'] for x in dataset['train']}
+id2label = {v: k for k, v in label2id.items()}
+
+print('---------------label2id-----------------')
+print(label2id)
+print('---------------id2label-----------------')
+print(id2label)
