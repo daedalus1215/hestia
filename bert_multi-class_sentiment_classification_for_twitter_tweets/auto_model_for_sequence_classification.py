@@ -228,10 +228,3 @@ def get_predictions(text):
 get_predictions("I was so happy")
 
 trainer.save_model('bert-base-uncased-serntiment-model')
-
-
-
-### Use Pipeline for prediction
-from transformers import Pipeline
-classifier = pipeline('text-classification', model='bert-base-uncased-sentiment-model')
-classifier([text, 'hello, how are you?", "love you'])
