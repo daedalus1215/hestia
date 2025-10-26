@@ -6,3 +6,5 @@ fake_news.*
 **/bert_base_train_dir/*
 **/bert-base-uncased-serntiment-model/*
 **/*.jsonq
+
+resources/** */
