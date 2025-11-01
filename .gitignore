@@ -7,4 +7,4 @@ fake_news.*
 **/bert-base-uncased-serntiment-model/*
 **/*.jsonq
 
-resources/** */
+resources/**
