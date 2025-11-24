@@ -14,6 +14,7 @@ df['text_tokens'] = df['text'].apply(lambda x: len(str(x).split()) * 1.5 if pd.n
 print (df['title_tokens'].describe())
 print (df['text_tokens'].describe())
 
+print('---------------df-----------------')
 print(df)
 
 fig, ax = plt.subplots(1,2, figsize=(15,5))
@@ -66,19 +67,53 @@ model_ckpt = "huawei-noah/TinyBERT_General_4L_312D"
 tinybert_tokenizer = AutoTokenizer.from_pretrained(model_ckpt)
 tinybert_tokens = tinybert_tokenizer.tokenize(text)
 
+print('---------------distilbert_tokens-----------------')
 print(distilbert_tokens)
+print('---------------mobilebert_tokens-----------------')
 print(mobilebert_tokens)
+print('---------------tinybert_tokens-----------------')
 print(tinybert_tokens)
 
 
 ### Time to tokenize
 
-def tokenize(batch):
+def distilbert_tokenize(batch):
     temp = distilbert_tokenizer(batch['text'], padding=True, truncation=True)
     return temp
 
-print(tokenize(dataset['train'][:2]))
+print('---------------distilbert_tokenize-----------------')
+print(distilbert_tokenize(dataset['train'][:2]))
 
+def mobilebert_tokenize(batch):
+    temp = mobilebert_tokenizer(batch['text'], padding=True, truncation=True)
+    return temp
+
+print('---------------mobilebert_tokenize-----------------')
+print(mobilebert_tokenize(dataset['train'][:2]))
+
+def tinybert_tokenize(batch):
+    temp = tinybert_tokenizer(batch['text'], padding=True, truncation=True)
+    return temp
+
+print('---------------tinybert_tokenize-----------------')
+print(tinybert_tokenize(dataset['train'][:2]))
 
 ### Apply the map function
 # encoded_dataset = dataset.map(tokeni)
+
+
+
+
+import transformers import AutoModel
+import torch
+
+label2id = {"Real": 0, "Fake": 1}
+id2label = {0: "Real", 1: "Fake"}
+model_ckpt = "distilbert-base-uncased"
+
+num_labels = len(label2id)
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+config = AutoConfig.from_pretrained(model_ckpt, label2id=label2id, id2label=id2label)
+model = AutoModelForSequenceClassification.from_pretrained(model_ckpt, config=config).to(device)
+
