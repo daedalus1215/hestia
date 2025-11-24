@@ -31,8 +31,7 @@ plt.savefig("../resources/output.png")
 
 
 
-
-
+# Data Preparation (Training, Testing, Validation)
 from sklearn.model_selection import train_test_split
 # 70% for training, 20% test, 10% validation
 train, test = train_test_split(df, test_size=0.3, stratify=df['label'])
@@ -50,7 +49,11 @@ dataset = DatasetDict({
 print(dataset)
 
 
-### Let's start to Tokenize the data
+
+
+
+
+# Data Tokenization
 from transformers  import AutoTokenizer
 text = "Machine learning is awesome!! Thanks KGP Talkie."
 
@@ -74,8 +77,6 @@ print(mobilebert_tokens)
 print('---------------tinybert_tokens-----------------')
 print(tinybert_tokens)
 
-
-### Time to tokenize
 
 def distilbert_tokenize(batch):
     temp = distilbert_tokenizer(batch['text'], padding=True, truncation=True)
@@ -104,16 +105,41 @@ print(tinybert_tokenize(dataset['train'][:2]))
 
 
 
-import transformers import AutoModel
+
+
+
+# Model Building
+
+from transformers import AutoModel, AutoConfig, AutoModelForSequenceClassification
 import torch
 
 label2id = {"Real": 0, "Fake": 1}
 id2label = {0: "Real", 1: "Fake"}
-model_ckpt = "distilbert-base-uncased"
-
 num_labels = len(label2id)
+model_ckpt = "distilbert-base-uncased"
+mobilebert_model_ckpt = "google/mobilebert-uncased"
+tinybert_model_ckpt = "huawei-noah/TinyBERT_General_4L_312D"
+
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-config = AutoConfig.from_pretrained(model_ckpt, label2id=label2id, id2label=id2label)
-model = AutoModelForSequenceClassification.from_pretrained(model_ckpt, config=config).to(device)
+distilbert_config = AutoConfig.from_pretrained(model_ckpt, label2id=label2id, id2label=id2label)
+distilbert_model = AutoModelForSequenceClassification.from_pretrained(model_ckpt, config=distilbert_config).to(device)
 
+mobilebert_config = AutoConfig.from_pretrained(mobilebert_model_ckpt, label2id=label2id, id2label=id2label)
+mobilebert_model = AutoModelForSequenceClassification.from_pretrained(mobilebert_model_ckpt, config=mobilebert_config).to(device)
+
+tinybert_config = AutoConfig.from_pretrained(tinybert_model_ckpt, label2id=label2id, id2label=id2label)
+tinybert_model = AutoModelForSequenceClassification.from_pretrained(tinybert_model_ckpt, config=tinybert_config).to(device)
+
+print('---------------distilbert_model-----------------')
+print(distilbert_model.config)
+print('---------------mobilebert_model-----------------')
+print(mobilebert_model.config)
+print('---------------tinybert_model-----------------')
+print(tinybert_model.config)
+
+
+
+
+
+# Model Training
