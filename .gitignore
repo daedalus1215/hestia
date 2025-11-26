@@ -8,4 +8,4 @@ fake_news.*
 **/*.jsonq
 
 resources/**
-train_dir/**
+fake_news_detection/train_dir/**
