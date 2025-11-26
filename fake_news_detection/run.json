@@ -1,0 +1,34 @@
+{
+    "bert": {
+        "test_loss": 0.14265288412570953,
+        "test_accuracy": 0.9474835886214442,
+        "test_f1": 0.9475064180903078,
+        "test_runtime": 5.0678,
+        "test_samples_per_second": 721.423,
+        "test_steps_per_second": 11.445
+    },
+    "distilbert": {
+        "test_loss": 0.11425961554050446,
+        "test_accuracy": 0.9562363238512035,
+        "test_f1": 0.95625534840859,
+        "test_runtime": 2.5603,
+        "test_samples_per_second": 1427.971,
+        "test_steps_per_second": 22.654
+    },
+    "mobilebert": {
+        "test_loss": 0.25328540802001953,
+        "test_accuracy": 0.8968818380743983,
+        "test_f1": 0.8973416763839449,
+        "test_runtime": 2.2107,
+        "test_samples_per_second": 1653.787,
+        "test_steps_per_second": 26.236
+    },
+    "tinybert": {
+        "test_loss": 0.2097707837820053,
+        "test_accuracy": 0.9225929978118161,
+        "test_f1": 0.9226401504689948,
+        "test_runtime": 0.6663,
+        "test_samples_per_second": 5486.642,
+        "test_steps_per_second": 87.042
+    }
+}
