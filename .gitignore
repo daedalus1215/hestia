@@ -9,3 +9,4 @@ fake_news.*
 
 resources/**
 fake_news_detection/train_dir/**
+fake_news_detection/fake_news/**

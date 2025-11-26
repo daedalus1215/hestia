@@ -47,7 +47,8 @@ from transformers import TrainingArguments
 
 def train_model(model_name):
     model_ckpt = model_dict[model_name]
-    
+    label2id = {"Real": 0, "Fake": 1}
+    id2label = {0: "Real", 1: "Fake"}
     config = AutoConfig.from_pretrained(model_ckpt, label2id=label2id, id2label=id2label)
     model = AutoModelForSequenceClassification.from_pretrained(model_ckpt, config=config).to(device)
     tokenizer = AutoTokenizer.from_pretrained(model_ckpt)
@@ -84,6 +85,7 @@ def train_model(model_name):
 
     trainer.train()
     preds = trainer.predict(encoded_dataset['test'])
+    trainer.save_model("fake_news")
     return preds.metrics
 
 model_performance = {}
