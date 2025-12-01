@@ -3,30 +3,40 @@ import json
 import requests
 
 
-train = pd.read_csv("https://raw.githubusercontent.com/laxmimerit/All-CSV-ML-Data-Files-Download/master/mit_restaurant_search_ner/train.bio", sep="\t", header=None)
-print(train.head())
+train = pd.read_csv("data/train.bio", sep="\t", header=None)
+train_tokens = train[1].tolist() 
+train_tags = train[0].tolist()
 
-# Separate tokens and tags into two arrays
-tokens = train[1].tolist()  # Column 1 contains tokens
-tags = train[0].tolist()    # Column 0 contains tags
+# print(train.head())
+# print(f"\ntrain_tokens: {train_tokens[:10]}")
+# print(f"Tags: {tags[:10]}")
 
-print(f"\nTokens: {tokens[:10]}")
-print(f"Tags: {tags[:10]}")
+# print("---------------len(train_tokens)-----------------")
+# print(len(train_tokens))
+# print("---------------len(tags)-----------------")
+# print(len(tags))
 
-print("---------------len(tokens)-----------------")
-print(len(tokens))
-print("---------------len(tags)-----------------")
-print(len(tags))
+test = pd.read_csv("data/test.bio", sep="\t", header=None)
+test_tokens = test[1].tolist()
+test_tags = test[0].tolist()
+
+print("---------------len(test_tokens)-----------------")
+print(len(test_tokens))
+print("---------------len(test_tags)-----------------")
+print(len(test_tags))
 
 
 
 from datasets import Dataset, DatasetDict
 
-df = pd.DataFrame({'tokens': tokens, 'ner_tags_str': tags})
-dataset = Dataset.from_pandas(df)
+train_df = pd.DataFrame({'tokens': train_tokens, 'ner_tags_str': train_tags})
+train_dataset = Dataset.from_pandas(train_df)
 
-dataset = DatasetDict({'train': dataset})
+test_df = pd.DataFrame({'tokens': test_tokens, 'ner_tags_str': test_tags})
+test_dataset = Dataset.from_pandas(test_df)
+
+# Being a little lazy and using the test dataset as the validation dataset. I could have used a separate validation dataset. 
+dataset = DatasetDict({'train': train_dataset, 'test': test_dataset, 'validation': test_dataset})
 
 print("---------------dataset-----------------")
 print(dataset)
-
