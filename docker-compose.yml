@@ -1,0 +1,33 @@
+services:
+  vllm:
+    image: vllm/vllm-openai:latest
+    container_name: qwen25-14b-instruct
+    ports:
+      - "8000:8000"
+    environment:
+      - HF_TOKEN=${HF_TOKEN}
+      - VLLM_ATTENTION_BACKEND=FLASHINFER
+    volumes:
+      - ~/.cache/huggingface:/root/.cache/huggingface
+      - ~/.cache/vllm:/root/.cache/vllm
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: ["gpu"]
+    command:
+      - --model
+      - Qwen/Qwen2.5-14B-Instruct
+      - --port
+      - "8000"
+      - --max-model-len
+      - "32768"          # 32k context is plenty for dictation; you can lower if you want
+      - --max-num-seqs
+      - "4"              # how many requests to serve concurrently; bump when stable
+      - --enforce-eager
+      - --gpu-memory-utilization
+      - "0.90"           # you’ve got a 5090, so this is fine
+      - --swap-space
+      - "8"
+      - --trust-remote-code
+
